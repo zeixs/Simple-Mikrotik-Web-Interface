@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BackboneController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('interface-status', [BackboneController::class, 'interfaceStatus'])->name('interface-status');
+Route::get('monitor-traffic/{int}', [BackboneController::class, 'monitorTraffic'])
+    ->name('monitor-traffic');
+
+// Route::get('/monitor-traffic/{interface}', 'BackboneController@monitorTraffic')->name('monitor-traffic');
