@@ -70,6 +70,6 @@ class BackboneController extends Controller
 
         $API->disconnect();
 
-        return ($commandResult[0]);
+        return ($commandResult);
     }
 };
