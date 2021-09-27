@@ -22,7 +22,7 @@ Route::get('dashboard', function () {
 })->name('dashboard');
 Route::get('connected-user', function () {
     return view('connected-user');
-});
+})->name('connected-user');
 
 Route::get('interface-status', [BackboneController::class, 'interfaceStatus'])->name('interface-status');
 Route::get('monitor-traffic/{int}', [BackboneController::class, 'monitorTraffic'])
