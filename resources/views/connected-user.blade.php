@@ -39,8 +39,6 @@ layout-footer-fixed'])
                             <select class="form-control select2 select2-danger select2-hidden-accessible"
                                 data-dropdown-css-class="select2-danger" style="width: 100%;" data-select2-id="12"
                                 tabindex="-1" aria-hidden="true" id="server_select">
-                                {{-- <option data-select2-id="39">dhcp1</option>
-                                <option data-select2-id="40">dhcp2</option> --}}
                             </select>
                         </div>
                     </div>
@@ -51,19 +49,6 @@ layout-footer-fixed'])
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">Client List</h3>
-
-                            <div class="card-tools">
-                                <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="table_search" class="form-control float-right"
-                                        placeholder="Search">
-
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-default">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0" style="height: 450px;">
@@ -71,13 +56,14 @@ layout-footer-fixed'])
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>IP Address</th>
-                                        <th>client Id</th>
-                                        <th>Mac Address</th>
-                                        <th>Server</th>
+                                        <th>Address</th>
+                                        <th>Active Mac Address</th>
+                                        <th>Client Id</th>
+                                        <th>Hostname</th>
                                         <th>Status</th>
-                                        <th>Expired In</th>
-                                        <th>Last Seen</th>
+                                        <th>Expires After</th>
+                                        <th>Disabled</th>
+                                        <th>Blocked</th>
 
                                     </tr>
                                 </thead>
@@ -111,24 +97,29 @@ layout-footer-fixed'])
                     $.each(htmlresponse, function(key, value) {
                         $("#server_select").append('<option>' + value.name +
                             '</option>');
-                        console.log("++++++ ServerOnload ++++++", value.name);
                     })
                     $.ajax({
                         type: 'GET',
                         url: '/client-list/' + $("#server_select").val(),
                         success: function(htmlresponse) {
+                            var counter = 0;
+
                             $.each(htmlresponse, function(key, value) {
-                                var tr = $("<tr />")
-                                $.each(value, function(k, v) {
-                                    tr.append(
-                                        $("<td />", {
-                                            html: v
-                                        })[0].outerHTML
-                                    );
-                                    $("table tbody").append(tr)
-                                })
+                                counter = counter + 1;
+                                $("table tbody").append("<tr><td>" + counter +
+                                    "</td><td>" +
+                                    value.address + "</td><td>" + value[
+                                        'active-mac-address'] +
+                                    "</td><td>" + value['client-id'] +
+                                    "</td><td>" +
+                                    value['host-name'] + "</td><td>" + value
+                                    .status +
+                                    "</td><td>" + value['expires-after'] +
+                                    "</td><td>" +
+                                    value.disabled + "</td><td>" + value
+                                    .blocked +
+                                    "</td><tr>")
                             })
-                            console.log("++++++ Onload ++++++", htmlresponse);
                         },
                         error: function(e) {
                             alert("error");
@@ -141,10 +132,6 @@ layout-footer-fixed'])
             });
         });
 
-        // $(document).ready(function() {
-
-        // });
-
         jQuery(document).ready(function getClient($) {
             $("#server_select").on('change', function() {
                 var level = $(this).val();
@@ -154,22 +141,27 @@ layout-footer-fixed'])
                     url: '/client-list/' + level,
                     success: function(htmlresponse) {
                         $('#client_list').append('<thead><tr><th>' + 'No' + '</th><th>' +
-                            'blah' + '</th><th>' +
-                            'blah' + '</th><th>' + 'blah' + '</th><th>' + 'blah' +
-                            '</th><th>' + 'blah' + '</th></tr></thead>' +
+                            'Address' + '</th><th>' +
+                            'Active Mac Address' + '</th><th>' + 'Client Id' + '</th><th>' +
+                            'Hostname' +
+                            '</th><th>' + 'Status' + '</th><th>' + 'Expires After' +
+                            '</th><th>' + 'Disabled' + '</th><th>' + 'Blocked' +
+                            '</th></tr></thead>' +
                             '<tbody></tbody>');
+
+                        var counter = 0;
+
                         $.each(htmlresponse, function(key, value) {
-                            var tr = $("<tr />")
-                            $.each(value, function(k, v) {
-                                tr.append(
-                                    $("<td />", {
-                                        html: v
-                                    })[0].outerHTML
-                                );
-                                $("table tbody").append(tr)
-                            })
+                            counter = counter + 1;
+                            $("table tbody").append("<tr><td>" + counter + "</td><td>" +
+                                value.address + "</td><td>" + value[
+                                    'active-mac-address'] +
+                                "</td><td>" + value['client-id'] + "</td><td>" +
+                                value['host-name'] + "</td><td>" + value.status +
+                                "</td><td>" + value['expires-after'] + "</td><td>" +
+                                value.disabled + "</td><td>" + value.blocked +
+                                "</td><tr>")
                         })
-                        console.log("+++++CurrentPage+++++++", htmlresponse);
                     },
                     error: function(e) {
                         alert("error");

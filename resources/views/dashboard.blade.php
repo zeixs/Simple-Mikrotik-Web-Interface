@@ -69,7 +69,7 @@ layout-footer-fixed'])
                                 <th>RX</th>
                             </tr>
                             <tr>
-                                <td><input name="interface" id="interface" type="text" value="ether2" /></td>
+                                <td><input name="interface" id="interface" type="text" value="ether1" /></td>
                                 <td>
                                     <div id="tabletx"></div>
                                 </td>
