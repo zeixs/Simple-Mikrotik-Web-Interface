@@ -28,3 +28,4 @@ Route::get('interface-status', [BackboneController::class, 'interfaceStatus'])->
 Route::get('monitor-traffic/{int}', [BackboneController::class, 'monitorTraffic'])
     ->name('monitor-traffic');
 Route::get('client-list/{dhcpServer}', [BackboneController::class, 'dhcpClient'])->name('client-list');
+Route::get('dhcp-server', [BackboneController::class, 'dhcpServer'])->name('server-list');

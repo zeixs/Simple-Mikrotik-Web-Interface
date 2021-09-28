@@ -51,6 +51,27 @@ class BackboneController extends Controller
         print json_encode($result);
     }
 
+    public static function dhcpServer()
+    {
+        $iphost = "10.100.20.1";
+        $userhost = "admin";
+        $passwdhost = "Sshd_1234";
+        $api_puerto = 8728;
+
+        $API = new RouterosAPI();
+        $API->debug = false;
+        if ($API->connect($iphost, $userhost, $passwdhost)) {
+
+            $commandResult = $API->comm("/ip/dhcp-server/print");
+        } else {
+            echo "<font color='#ff0000'>Connection Failed!!</font>";
+        }
+
+        $API->disconnect();
+
+        return ($commandResult);
+    }
+
     public function dhcpClient($dhcpServer)
     {
         $iphost = "10.100.20.1";

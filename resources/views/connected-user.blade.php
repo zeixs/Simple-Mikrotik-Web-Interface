@@ -24,6 +24,7 @@ layout-footer-fixed'])
             </div>
         </div>
         <section class="content">
+
             <div class="row">
                 <div class="col-12 col-sm-6" data-select2-id="30">
                     <div class="form-group" data-select2-id="29">
@@ -38,8 +39,8 @@ layout-footer-fixed'])
                             <select class="form-control select2 select2-danger select2-hidden-accessible"
                                 data-dropdown-css-class="select2-danger" style="width: 100%;" data-select2-id="12"
                                 tabindex="-1" aria-hidden="true" id="server_select">
-                                <option data-select2-id="39">dhcp1</option>
-                                <option data-select2-id="40">dhcp2</option>
+                                {{-- <option data-select2-id="39">dhcp1</option>
+                                <option data-select2-id="40">dhcp2</option> --}}
                             </select>
                         </div>
                     </div>
@@ -105,20 +106,34 @@ layout-footer-fixed'])
         $(document).ready(function() {
             $.ajax({
                 type: 'GET',
-                url: '/client-list/' + $("#server_select").val(),
+                url: 'dhcp-server',
                 success: function(htmlresponse) {
                     $.each(htmlresponse, function(key, value) {
-                        var tr = $("<tr />")
-                        $.each(value, function(k, v) {
-                            tr.append(
-                                $("<td />", {
-                                    html: v
-                                })[0].outerHTML
-                            );
-                            $("table tbody").append(tr)
-                        })
+                        $("#server_select").append('<option>' + value.name +
+                            '</option>');
+                        console.log("++++++ ServerOnload ++++++", value.name);
                     })
-                    console.log("++++++ Onload ++++++", htmlresponse);
+                    $.ajax({
+                        type: 'GET',
+                        url: '/client-list/' + $("#server_select").val(),
+                        success: function(htmlresponse) {
+                            $.each(htmlresponse, function(key, value) {
+                                var tr = $("<tr />")
+                                $.each(value, function(k, v) {
+                                    tr.append(
+                                        $("<td />", {
+                                            html: v
+                                        })[0].outerHTML
+                                    );
+                                    $("table tbody").append(tr)
+                                })
+                            })
+                            console.log("++++++ Onload ++++++", htmlresponse);
+                        },
+                        error: function(e) {
+                            alert("error");
+                        }
+                    });
                 },
                 error: function(e) {
                     alert("error");
@@ -126,13 +141,23 @@ layout-footer-fixed'])
             });
         });
 
+        // $(document).ready(function() {
+
+        // });
+
         jQuery(document).ready(function getClient($) {
             $("#server_select").on('change', function() {
                 var level = $(this).val();
+                $('#client_list').empty();
                 $.ajax({
                     type: 'GET',
                     url: '/client-list/' + level,
                     success: function(htmlresponse) {
+                        $('#client_list').append('<thead><tr><th>' + 'No' + '</th><th>' +
+                            'blah' + '</th><th>' +
+                            'blah' + '</th><th>' + 'blah' + '</th><th>' + 'blah' +
+                            '</th><th>' + 'blah' + '</th></tr></thead>' +
+                            '<tbody></tbody>');
                         $.each(htmlresponse, function(key, value) {
                             var tr = $("<tr />")
                             $.each(value, function(k, v) {
